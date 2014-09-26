@@ -28,7 +28,7 @@ end
 
 function camera.update(dt)
   if camera.lock == true then
-    camera:setPosition(player.fx - ((global.screenWidth / 2) * camera.scaleX), player.fy - ((global.screenHeight / 2) * camera.scaleY))
+    camera:setPosition(math.floor(player.sx) - ((global.screenWidth / 2) * camera.scaleX), math.floor(player.sy) - ((global.screenHeight / 2) * camera.scaleY))
   end
 
   if camera.shaking == true then

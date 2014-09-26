@@ -23,6 +23,8 @@ function map.draw()
 
 	map.currentMap:drawWorldCollision(collision)
 
+	love.graphics.polygon("line", player.body:getWorldPoints(player.shape:getPoints()))
+
 end
 
 function map.update(dt)

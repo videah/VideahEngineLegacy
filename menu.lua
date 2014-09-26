@@ -2,17 +2,17 @@ menu = {}
 
 function menu.load()
 
-	menu.Title = "VideahEngine"
+	menu.title = "VideahEngine"
 	menu.titleimage = "data/images/videahenginelogo.png"
 	menu.titletype = "image"
 
-	menu.Image = "data/images/menubg.png"
-	menu.Options = {"Start", "Multiplayer", "Quit"}
-	menu.OptionsState = {"game", "multiplayer", "quit"}
+	menu.image = "data/images/menubg.png"
+	menu.options = {"Start", "Multiplayer", "Quit"}
+	menu.optionsstate = {"game", "multiplayer", "quit"}
 
-	menu.Type = "scrolling_tiled"
-	menu.ScrollDirection = "left"
-	menu.ScrollSpeed = 50
+	menu.type = "scrolling_tiled"
+	menu.scrolldirection = "left"
+	menu.scrollspeed = 50
 
 	menu.InternalVariables()
 
@@ -25,7 +25,7 @@ end
 function menu.draw()
 
 	menu.GenerateBackground()
-	menu.GenerateTitle()
+	menu.Generatetitle()
 
 end
 
@@ -37,23 +37,23 @@ end
 
 function menu.GenerateBackground()
 
-	if menu.Type == "tiled" then
+	if menu.type == "tiled" then
 
-		menu.Image:setWrap('repeat', 'repeat')
-		menu.bgQuad = love.graphics.newQuad( 0, 0, global.screenWidth, global.screenHeight, menu.Image:getHeight(), menu.Image:getWidth() )
-		love.graphics.draw( menu.Image, menu.bgQuad, 0, 0)
+		menu.image:setWrap('repeat', 'repeat')
+		menu.bgQuad = love.graphics.newQuad( 0, 0, global.screenWidth, global.screenHeight, menu.image:getHeight(), menu.image:getWidth() )
+		love.graphics.draw( menu.image, menu.bgQuad, 0, 0)
 
-	elseif menu.Type == "fill" then
+	elseif menu.type == "fill" then
 
 		--TODO: Add code for more types of menu backgrounds.
 
-	elseif menu.Type == "scrolling_tiled" then
+	elseif menu.type == "scrolling_tiled" then
 
-		menu.Image:setWrap('repeat', 'repeat')
-		menu.bgQuad = love.graphics.newQuad( menu.bgOffset, 0, global.screenWidth, global.screenHeight, menu.Image:getHeight(), menu.Image:getWidth() )
-		love.graphics.draw( menu.Image, menu.bgQuad, 0, 0)
+		menu.image:setWrap('repeat', 'repeat')
+		menu.bgQuad = love.graphics.newQuad( menu.bgOffset, 0, global.screenWidth, global.screenHeight, menu.image:getHeight(), menu.image:getWidth() )
+		love.graphics.draw( menu.image, menu.bgQuad, 0, 0)
 
-	elseif menu.Type == "color" then
+	elseif menu.type == "color" then
 
 		love.graphics.setColor(menubgRed, menubgGreen, menubgBlue, 255)
 		love.graphics.rectangle( "fill", 0, 0, global.screenWidth, global.screenHeight )
@@ -62,12 +62,12 @@ function menu.GenerateBackground()
 	end
 end
 
-function menu.GenerateTitle()
+function menu.Generatetitle()
 
 	if menu.titletype == "text" then
 		love.graphics.setFont(font.menutitle)
 
-		love.graphics.printf(menu.Title, 0, global.screenHeight / 10, global.screenWidth, 'center')
+		love.graphics.printf(menu.title, 0, global.screenHeight / 10, global.screenWidth, 'center')
 
 		love.graphics.setFont(font.default)
 	end
@@ -90,20 +90,20 @@ function menu.GenerateMenuFrame()
 	menuframe:SetDraggable(false)
 	menuframe:ShowCloseButton(false)
 	menuframe:SetWidth(300)
-	menuframe:SetHeight(30 + #menu.Options * 55)
+	menuframe:SetHeight(30 + #menu.options * 55)
 	menuframe:Center()
 
-	for i=1, #menu.Options, 1 do
+	for i=1, #menu.options, 1 do
 
 		button[i] = loveframes.Create("button", menuframe)
-		button[i]:SetText(menu.Options[i])
+		button[i]:SetText(menu.options[i])
 		button[i]:SetWidth(290)
 		button[i]:SetHeight(50)
 		button[i]:SetPos(5, buttonStartPos)
 		buttonStartPos = buttonStartPos + 55
 		button[i].OnClick = function(object, x, y)
 
-			state:changeState(menu.OptionsState[i])
+			state:changeState(menu.optionsstate[i])
 
 		end
 
@@ -113,14 +113,14 @@ end
 
 function menu.CalculateScrolling(dt)
 
-	if menu.Type == "scrolling_tiled" then
-		if menu.ScrollDirection == "left" then
+	if menu.type == "scrolling_tiled" then
+		if menu.scrolldirection == "left" then
 
-			menu.bgOffset = menu.bgOffset + menu.ScrollSpeed * dt
+			menu.bgOffset = menu.bgOffset + menu.scrollspeed * dt
 
-		elseif menu.ScrollDirection == "right" then
+		elseif menu.scrolldirection == "right" then
 
-			menu.bgOffset = menu.bgOffset - menu.ScrollSpeed * dt
+			menu.bgOffset = menu.bgOffset - menu.scrollspeed * dt
 
 		end
 	end
@@ -130,7 +130,7 @@ end
 
 function menu.InternalVariables()
 
-	menu.Image = love.graphics.newImage( menu.Image )
+	menu.image = love.graphics.newImage( menu.image )
 	menu.titleimage = love.graphics.newImage( menu.titleimage )
 	menu.bgOffset = 0
 

@@ -13,7 +13,7 @@ function player.load()
 	player.fx, player.fy = math.floor(player.x), math.floor(player.y)
 
 	player.body		= love.physics.newBody(world, player.x/2, player.y/2, "dynamic")
-	player.shape	= love.physics.newRectangleShape(32, 32)
+	player.shape	= love.physics.newRectangleShape(30, 30)
 	player.fixture	= love.physics.newFixture(player.body, player.shape)
 
 	player.body:setLinearDamping(10)
@@ -35,6 +35,8 @@ end
 function player.update(dt)
 
 	player.fx, player.fy = math.floor(player.x), math.floor(player.y)
+
+	player.body:setAngle(0)
 
 	player.TempControls(dt)
 

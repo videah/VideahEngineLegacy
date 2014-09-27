@@ -34,14 +34,14 @@ function camera.update(dt)
   if camera.shaking == true then
 
     if camera.shaketype == "lock" then
-      camera:setPosition(camera.shakeX + math.random(-camera.intensity, camera.intensity), camera.shakeY + math.random(-camera.intensity, camera.intensity))
+      camera:setPosition(math.floor(camera.shakeX + math.random(-camera.intensity, camera.intensity)), math.floor(camera.shakeY + math.random(-camera.intensity, camera.intensity)))
     end
 
     if camera.shaketype == "player" then
         camera.shakeX, camera.shakeY = player:getPosition()
-        camera.shakeX, camera.shakeY = camera.shakeX - (global.screenWidth / 2), camera.shakeY - (global.screenHeight / 2)
+        camera.shakeX, camera.shakeY = math.floor(camera.shakeX - ((global.screenWidth / 2) * camera.scaleX)), math.floor(camera.shakeY - ((global.screenHeight / 2) * camera.scaleY))
         camera.lock = false
-        camera:setPosition(camera.shakeX + math.random(-camera.intensity, camera.intensity), camera.shakeY + math.random(-camera.intensity, camera.intensity))
+        camera:setPosition(math.floor(camera.shakeX + math.random(-camera.intensity, camera.intensity)), math.floor(camera.shakeY + math.random(-camera.intensity, camera.intensity)))
     end
 
     if camera.intensity <= 0 then

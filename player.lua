@@ -82,5 +82,5 @@ function player:drawName(boolean)
 
 end
 function player:getPosition()
-	return player.x, player.y
+	return player.sx, player.sy
 end

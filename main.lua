@@ -19,6 +19,7 @@ require 'player'
 require 'camera'
 require 'state'
 require 'splash'
+require 'panel'
 
 ---------------------------------------------------------------------------------------------------
 -- Libraries
@@ -46,6 +47,8 @@ global.state = "game"
 function love.load()
 
 	splash.load()
+
+	panel.load()
 
 	font.load()
 	
@@ -88,6 +91,8 @@ function love.draw()
 	end
 
 	global.fps = love.timer.getFPS()
+
+	panel.draw()
 
 end
 

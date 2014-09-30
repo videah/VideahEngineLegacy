@@ -5,15 +5,15 @@ print("Loaded gamestate system ...")
 state.currentState = "splash"
 
 function state:changeState(input)
-	state.currentState = input
+	self.currentState = input
 end
 
 function state:getState()
-	return state.currentState
+	return self.currentState
 end	
 
 function state:isStateEnabled(input)
-	if input == state.currentState then
+	if input == self.currentState then
 		return true
 	else
 		return false

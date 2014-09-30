@@ -3,7 +3,7 @@ map = {}
 function map.load()
 
 	map.directory = "maps/"
-	map.currentMap = sti.new(map.directory .. "test")
+	map.currentMap = sti.new(map.directory .. "test2")
 
 	map.Speed = 500
 
@@ -53,5 +53,7 @@ function map:changeMap(string)
 	currentMap = sti.new(map.directory .. string)
 	player.x = 0
 	player.y = 0
+	player.sx = 0
+	player.sy = 0
 
 end

@@ -3,7 +3,6 @@ font = {}
 function font.load()
 
 	font.default = love.graphics.newFont(12)
-	font.debug = love.graphics.newFont(24)
 	font.playername = love.graphics.newFont(24)
 	font.menutitle = love.graphics.newFont(72)
 	font.menuoptions = love.graphics.newFont(32)

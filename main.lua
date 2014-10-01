@@ -27,6 +27,7 @@ require 'panel'
 require 'libs/LoveFrames'
 
 sti = require 'libs/STI'
+jumper = require 'libs/Jumper'
 flux = require 'util/flux'
 
 ---------------------------------------------------------------------------------------------------

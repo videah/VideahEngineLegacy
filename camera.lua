@@ -29,12 +29,12 @@ end
 function camera.update(dt)
 
   if camera.type == "locked" then
-    camera:setPosition(math.floor(player.sx) - ((global.screenWidth / 2) * camera.scaleX), math.floor(player.sy) - ((global.screenHeight / 2) * camera.scaleY))
+    camera:setPosition(math.floor(player.sx), math.floor(player.sy))
   end
 
   if camera.type == "mouse-locked" then
 
-    -- TODO: Set camera to follow halfway between player and mouse.
+    camera:setPosition(math.floor(player.sx), math.floor(player.sy))
 
   end
 
@@ -78,8 +78,8 @@ function camera:scale(sx, sy)
 end
 
 function camera:setPosition(x, y)
-  self.x = x or self.x
-  self.y = y or self.y
+  self.x = x - (global.screenWidth / 2) * self.scaleX or self.x
+  self.y = y - (global.screenHeight / 2) * self.scaleY or self.y
 end
 
 function camera:setScale(s)

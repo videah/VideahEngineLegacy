@@ -5,7 +5,6 @@ require 'util/audio'
 require 'util/input'
 
 require 'util/debug'
-require 'util/console'
 
 require 'util/util'
 

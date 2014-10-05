@@ -15,6 +15,7 @@ camera.shakeY = 0
 
 camera.lmouseX = 0
 camera.lmouseY = 0
+camera.weight = 6
 
 print("Loaded camera system ...")
 
@@ -37,8 +38,8 @@ function camera.update(dt)
 
   if camera.type == "mouse-locked" then
 
-    camera.lmouseX = global.centerWidth - (global.mouseX - global.centerWidth * 2) / 3
-    camera.lmouseY = global.centerHeight - (global.mouseY - global.centerHeight * 2) / 3
+    camera.lmouseX = global.centerWidth - (global.mouseX - global.centerWidth * 2) / camera.weight
+    camera.lmouseY = global.centerHeight - (global.mouseY - global.centerHeight * 2) / camera.weight
 
     camera:setPosition(math.floor(player.sx) - camera.lmouseX, math.floor(player.sy) - camera.lmouseY)
 

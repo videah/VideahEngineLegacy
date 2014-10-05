@@ -38,6 +38,9 @@ global = {}
 global.screenWidth = love.graphics.getWidth()
 global.screenHeight = love.graphics.getHeight()
 
+global.centerWidth = (global.screenWidth / 2) * camera.scaleX
+global.centerHeight = (global.screenHeight / 2) * camera.scaleY
+
 global.version = "0.0.2"
 global.debug = true
 

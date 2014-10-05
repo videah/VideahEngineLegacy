@@ -13,6 +13,9 @@ camera.intensity = 0
 camera.shakeX = 0
 camera.shakeY = 0
 
+camera.lmouseX = 0
+camera.lmouseY = 0
+
 print("Loaded camera system ...")
 
 function camera:set()
@@ -34,7 +37,10 @@ function camera.update(dt)
 
   if camera.type == "mouse-locked" then
 
-    camera:setPosition(math.floor(player.sx), math.floor(player.sy))
+    camera.lmouseX = global.centerWidth - (global.mouseX - global.centerWidth * 2) / 3
+    camera.lmouseY = global.centerHeight - (global.mouseY - global.centerHeight * 2) / 3
+
+    camera:setPosition(math.floor(player.sx) - camera.lmouseX, math.floor(player.sy) - camera.lmouseY)
 
   end
 
@@ -78,8 +84,13 @@ function camera:scale(sx, sy)
 end
 
 function camera:setPosition(x, y)
-  self.x = x - (global.screenWidth / 2) * self.scaleX or self.x
-  self.y = y - (global.screenHeight / 2) * self.scaleY or self.y
+  self.x = x or self.x
+  self.y = y or self.y
+end
+
+function camera:lookAt(x, y)
+  self.x = x - (global.centerWidth) * self.scaleX or self.x
+  self.y = y - (global.centerHeight) * self.scaleY or self.y
 end
 
 function camera:setScale(s)
@@ -97,6 +108,14 @@ end
 
 function camera:getMousePosition()
   return love.mouse.getX() * self.scaleX + self.x, love.mouse.getY() * self.scaleY + self.y
+end
+
+function camera:getMouseX()
+  return love.mouse.getX() * self.scaleX + self.x
+end
+
+function camera:getMouseY()
+  return love.mouse.getY() * self.scaleY + self.y
 end
 
 function camera:setType(type)

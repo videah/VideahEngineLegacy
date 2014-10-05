@@ -11,6 +11,7 @@ require 'util/util'
 
 m_math 		= require 'util/math'
 m_collide 	= require 'util/collide'
+socket = require 'socket'
 
 require 'menu'
 require 'fonts'
@@ -20,6 +21,7 @@ require 'camera'
 require 'state'
 require 'splash'
 require 'panel'
+require 'network'
 
 ---------------------------------------------------------------------------------------------------
 -- Libraries
@@ -43,9 +45,11 @@ global.debug = true
 global.state = "game"
 
 ---------------------------------------------------------------------------------------------------
--- Main collide
+-- Main
 
 function love.load()
+
+	network.load()
 
 	splash.load()
 

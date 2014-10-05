@@ -7,7 +7,7 @@ require 'util/input'
 require 'util/debug'
 require 'util/console'
 
-require 'util.ease'
+require 'util/util'
 
 m_math 		= require 'util/math'
 m_collide 	= require 'util/collide'
@@ -99,6 +99,8 @@ end
 
 function love.update(dt)
 
+	global.mouseX, global.mouseY = love.mouse.getPosition()
+
 	flux.update(dt)
 
 	love.audio.update()
@@ -140,12 +142,6 @@ function love.keypressed(key, isrepeat)
 			state:changeState("menu")
 
 		end
-	end
-
-	if key == "y" then
-
-		ease.ToggleBoolean(camera.lock)
-
 	end
 
 	if state:isStateEnabled("splash") then

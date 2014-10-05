@@ -5,7 +5,7 @@ camera.y = 0
 camera.scaleX = 0.5
 camera.scaleY = 0.5
 camera.rotation = 0
-camera.lock = true
+camera.type = "mouse-locked"
 
 camera.shaking = false
 camera.shaketype = "lock"
@@ -27,8 +27,15 @@ function camera:set()
 end
 
 function camera.update(dt)
-  if camera.lock == true then
+
+  if camera.type == "locked" then
     camera:setPosition(math.floor(player.sx) - ((global.screenWidth / 2) * camera.scaleX), math.floor(player.sy) - ((global.screenHeight / 2) * camera.scaleY))
+  end
+
+  if camera.type == "mouse-locked" then
+
+    -- TODO: Set camera to follow halfway between player and mouse.
+
   end
 
   if camera.shaking == true then
@@ -40,7 +47,6 @@ function camera.update(dt)
     if camera.shaketype == "player" then
         camera.shakeX, camera.shakeY = player:getPosition()
         camera.shakeX, camera.shakeY = math.floor(camera.shakeX - ((global.screenWidth / 2) * camera.scaleX)), math.floor(camera.shakeY - ((global.screenHeight / 2) * camera.scaleY))
-        camera.lock = false
         camera:setPosition(math.floor(camera.shakeX + math.random(-camera.intensity, camera.intensity)), math.floor(camera.shakeY + math.random(-camera.intensity, camera.intensity)))
     end
 
@@ -91,6 +97,14 @@ end
 
 function camera:getMousePosition()
   return love.mouse.getX() * self.scaleX + self.x, love.mouse.getY() * self.scaleY + self.y
+end
+
+function camera:setType(type)
+  self.type = type
+end
+
+function camera:getType()
+  return self.type
 end
 
 function camera:shake(intensity, duration)

@@ -21,7 +21,7 @@ local _Debug = {
 	history = {''},
 	historyIndex = 1,
 
-	Font = love.graphics.newFont(12),
+	Font = love.graphics.newFont("data/fonts/consola.ttf", 17),
 	BigFont = love.graphics.newFont(24),
 	Proposals = {},
 	ProposalLocation = _G;
@@ -105,9 +105,9 @@ _Debug.overlay = function()
 
 	local fontSize = _Debug.Font:getHeight()
 	local w = love.graphics.getWidth()
-	local h = love.graphics.getHeight() / 6
+	local h = love.graphics.getHeight()
 	local R, G, B = unpack(_DebugSettings.OverlayColor)
-	love.graphics.setColor(R, G, B, 150)
+	love.graphics.setColor(R, G, B, 200)
 	love.graphics.rectangle("fill", 0, 0, w, h)
 	love.graphics.setColor(255, 255, 255)
 	love.graphics.setFont(_Debug.Font)

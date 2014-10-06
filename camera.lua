@@ -33,7 +33,9 @@ end
 function camera.update(dt)
 
   if camera.type == "locked" then
+
     camera:setPosition(math.floor(player.sx), math.floor(player.sy))
+
   end
 
   if camera.type == "mouse-locked" then
@@ -48,13 +50,23 @@ function camera.update(dt)
   if camera.shaking == true then
 
     if camera.shaketype == "lock" then
+
       camera:setPosition(math.floor(camera.shakeX + math.random(-camera.intensity, camera.intensity)), math.floor(camera.shakeY + math.random(-camera.intensity, camera.intensity)))
+
     end
 
     if camera.shaketype == "player" then
+
         camera.shakeX, camera.shakeY = player:getPosition()
         camera.shakeX, camera.shakeY = math.floor(camera.shakeX - ((global.screenWidth / 2) * camera.scaleX)), math.floor(camera.shakeY - ((global.screenHeight / 2) * camera.scaleY))
         camera:setPosition(math.floor(camera.shakeX + math.random(-camera.intensity, camera.intensity)), math.floor(camera.shakeY + math.random(-camera.intensity, camera.intensity)))
+
+    end
+
+    if camera.shaketype == "hybrid" then
+
+      camera:setPosition((math.floor(player.sx) - camera.lmouseX) + math.random(-camera.intensity, camera.intensity), (math.floor(player.sy) - camera.lmouseY) + math.random(-camera.intensity, camera.intensity))
+
     end
 
     if camera.intensity <= 0 then
@@ -127,25 +139,39 @@ function camera:getType()
   return self.type
 end
 
-function camera:shake(intensity, duration)
+function camera:shake(stype, intensity, duration)
 
-  -- Note: Using this function will lock the camera in place.
-  --  This is for use in cutscenes, or other places where the camera must be stationary.
-  --  Use camera:playerShake() to shake the camera whilst locked onto the player
+  if stype == "lock" then
 
-  self.shaking = true
-  self.intensity = intensity or 0
-  self.shaketype = "lock"
+    self.shaking = true
+    self.intensity = intensity or 0
+    self.shaketype = "lock"
 
-  self.shakeX, self.shakeY = camera:getPosition()
+    self.shakeX, self.shakeY = camera:getPosition()
 
-end
 
-function camera:playerShake(intensity, duration)
+  elseif stype == "player" then
 
-  self.shaking = true
-  self.intensity = intensity or 0
-  self.shaketype = "player"
+    self.shaking = true
+    self.intensity = intensity or 0
+    self.shaketype = "player"
+
+
+  elseif stype == "hybrid" then
+
+    self.shaking = true
+    self.intensity = intensity or 0
+    self.shaketype = "hybrid"
+
+  else
+
+    self.shaking = true
+    self.intensity = intensity or 0
+    self.shaketype = "lock"
+
+    self.shakeX, self.shakeY = camera:getPosition()
+
+  end
 
 end
 

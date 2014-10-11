@@ -31,20 +31,7 @@ function map.update(dt)
 
 	map.ftx, map.fty = math.floor(camera.x), math.floor(camera.y)
 
-	if camera.lock ~= true then
-		map.TempControls(dt)
-	end
-
 	world:update(dt)
-
-end
-
-function map.TempControls(dt)
-
-	if love.keyboard.isDown("up") then camera:move(0, math.floor(-map.Speed * dt)) end
-	if love.keyboard.isDown("down") then camera:move(0, math.floor(map.Speed * dt)) end
-	if love.keyboard.isDown("left") then camera:move(math.floor(-map.Speed * dt), 0) end
-	if love.keyboard.isDown("right") then camera:move(math.floor(map.Speed * dt), 0)  end
 
 end
 

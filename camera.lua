@@ -16,6 +16,7 @@ camera.shakeY = 0
 camera.lmouseX = 0
 camera.lmouseY = 0
 camera.weight = 6
+camera.speed = 500
 
 print("Loaded camera system ...")
 
@@ -47,6 +48,12 @@ function camera.update(dt)
 
   end
 
+  if camera.type == "unlocked" then
+
+    camera.unlockedControls(dt)
+
+  end
+
   if camera.shaking == true then
 
     if camera.shaketype == "lock" then
@@ -74,6 +81,15 @@ function camera.update(dt)
     end
 
   end
+
+end
+
+function camera.unlockedControls(dt)
+
+  if love.keyboard.isDown("up") then camera:move(0, math.floor(-camera.speed * dt)) end
+  if love.keyboard.isDown("down") then camera:move(0, math.floor(camera.speed * dt)) end
+  if love.keyboard.isDown("left") then camera:move(math.floor(-camera.speed * dt), 0) end
+  if love.keyboard.isDown("right") then camera:move(math.floor(camera.speed * dt), 0)  end
 
 end
 

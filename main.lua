@@ -99,7 +99,7 @@ function love.draw()
 
 		hud.draw()
 
-		cursor.crosshair.draw()
+		-- cursor.crosshair.draw()
 
 	end
 

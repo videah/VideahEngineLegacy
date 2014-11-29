@@ -10,7 +10,7 @@ function splash:newSplash(file)
 
 	table.insert(splash.imagelist, love.graphics.newImage(file))
 
-	print("Added splash!")
+	util.dprint("Loaded splashimage " .. file .. "...")
 
 end
 
@@ -25,6 +25,10 @@ function splash.load()
 end
 
 function splash.draw()
+
+	love.graphics.setColor(0,0,0,255)
+
+	love.graphics.rectangle("fill", 0, 0, global.screenWidth, global.screenHeight)
 
 	for i=1, #splash.splashlist do
 

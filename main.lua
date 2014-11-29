@@ -5,6 +5,7 @@ require 'util/audio'
 require 'util/input'
 
 require 'util/debug'
+LIP = require 'util/LIP'
 
 require 'util/util'
 
@@ -21,6 +22,13 @@ require 'state'
 require 'splash'
 require 'panel'
 require 'network'
+require 'hud'
+require 'lighting'
+require 'global'
+require 'input'
+require 'options'
+require 'weapon'
+require 'cursor'
 
 ---------------------------------------------------------------------------------------------------
 -- Libraries
@@ -31,27 +39,29 @@ sti = require 'libs/STI'
 jumper = require 'libs/Jumper'
 flux = require 'util/flux'
 
----------------------------------------------------------------------------------------------------
--- Global variables
-global = {}
-
-global.screenWidth = love.graphics.getWidth()
-global.screenHeight = love.graphics.getHeight()
-
-global.centerWidth = (global.screenWidth / 2) * camera.scaleX
-global.centerHeight = (global.screenHeight / 2) * camera.scaleY
-
-global.version = "0.0.3"
-global.debug = true
-
-global.state = "game"
 
 ---------------------------------------------------------------------------------------------------
 -- Main
 
 function love.load()
 
+	options.applySettings()
+
+	global.debug = options.settings.settings.debug
+
+	love.mouse.setGrabbed(true)	
+
+	cursor.load()
+
+	love.mouse.setCursor(cursor.cursor)
+
+	love.graphics.setBackgroundColor(35, 65, 85)
+
+	map.load()
+
 	network.load()
+
+	hud.load()
 
 	splash.load()
 
@@ -59,11 +69,15 @@ function love.load()
 
 	font.load()
 	
+	input.load()
+
 	menu.load()
 
-	map.load()
+	weapon.load()
 
 	player.load()
+
+	lighting.load()
 
 	print("Welcome to VideahEngine " .. global.version .. " !")
 
@@ -77,9 +91,15 @@ function love.draw()
 
 		map.draw()
 
+		bullet.draw()
+
 		player.draw()
 
 		camera:unset()
+
+		hud.draw()
+
+		cursor.crosshair.draw()
 
 	end
 
@@ -97,6 +117,14 @@ function love.draw()
 
 	end
 
+	if state:isStateEnabled("options") then
+
+		menu.GenerateBackground()
+
+		loveframes.draw()
+
+	end
+
 	global.fps = love.timer.getFPS()
 
 	panel.draw()
@@ -105,7 +133,7 @@ end
 
 function love.update(dt)
 
-	global.mouseX, global.mouseY = love.mouse.getPosition()
+	global.update(dt)
 
 	flux.update(dt)
 
@@ -116,6 +144,10 @@ function love.update(dt)
 		map.update(dt)
 		player.update(dt)
 		camera.update(dt)
+		lighting.update(dt)
+		hud.update(dt)
+		bullet.update(dt)
+		--love.mouse.setVisible(false)
 		
 	end
 
@@ -125,10 +157,12 @@ function love.update(dt)
 
 	end
 
-	if state:isStateEnabled("menu") then
+	if state:isStateEnabled("menu") or state:isStateEnabled("options") then
 
 		menu.update(dt)
 		loveframes.update()
+		love.mouse.setVisible(true)
+		love.mouse.setCursor(cursor.cursor)
 
 	end
 
@@ -137,6 +171,8 @@ function love.update(dt)
 		love.event.quit()
 
 	end
+
+	input.update(dt)
 
 end
 
@@ -162,6 +198,8 @@ function love.mousepressed(x, y, button)
  
     -- your code
  
+    input.mousepressed(x, y, button)
+
     loveframes.mousepressed(x, y, button)
  
 end

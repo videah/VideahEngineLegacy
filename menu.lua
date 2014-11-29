@@ -2,13 +2,13 @@ menu = {}
 
 function menu.load()
 
-	menu.title = "VideahEngine"
+	menu.title = "Untitled Game"
 	menu.titleimage = "data/images/videahenginelogo.png"
 	menu.titletype = "image"
 
 	menu.image = "data/images/menubg.png"
-	menu.options = {"Start", "Quit"}
-	menu.optionsstate = {"game", "quit"}
+	menu.options = {"Start", "Options", "Customize", "Quit"}
+	menu.optionsstate = {"game", "options", "customize", "quit"}
 
 	menu.type = "scrolling_tiled"
 	menu.scrolldirection = "left"

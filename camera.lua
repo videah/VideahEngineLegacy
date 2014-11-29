@@ -12,10 +12,12 @@ camera.shaketype = "lock"
 camera.intensity = 0
 camera.shakeX = 0
 camera.shakeY = 0
+camera.fade = true
+camera.fadeduration = 0
 
 camera.lmouseX = 0
 camera.lmouseY = 0
-camera.weight = 6
+camera.weight = 12  
 camera.speed = 500
 
 print("Loaded camera system ...")
@@ -25,9 +27,9 @@ function camera:set()
   --  Sets the scene by rotating and changing position of the camera.
 
   love.graphics.push()
-  love.graphics.rotate(-self.rotation)
   love.graphics.scale(1 / self.scaleX, 1 / self.scaleY)
   love.graphics.translate(-self.x, -self.y)
+  love.graphics.rotate(-self.rotation)
 
 end
 
@@ -41,8 +43,8 @@ function camera.update(dt)
 
   if camera.type == "mouse-locked" then
 
-    camera.lmouseX = global.centerWidth - (global.mouseX - global.centerWidth * 2) / camera.weight
-    camera.lmouseY = global.centerHeight - (global.mouseY - global.centerHeight * 2) / camera.weight
+    camera.lmouseX = math.floor(global.centerWidth - (global.mouseX - global.centerWidth * (1 / camera.scaleX)) / camera.weight)
+    camera.lmouseY = math.floor(global.centerHeight - (global.mouseY - global.centerHeight * (1 / camera.scaleX)) / camera.weight)
 
     camera:setPosition(math.floor(player.sx) - camera.lmouseX, math.floor(player.sy) - camera.lmouseY)
 
@@ -78,6 +80,10 @@ function camera.update(dt)
 
     if camera.intensity <= 0 then
       camera.shaking = false
+    end
+
+    if camera.fade == true then
+      camera.intensity = camera.intensity - camera.fadeduration
     end
 
   end
@@ -131,6 +137,14 @@ function camera:getPosition()
   return self.x, self.y
 end
 
+function camera:getPositionX()
+  return self.x
+end
+
+function camera:getPositionY()
+  return self.y
+end
+
 function camera:getScale()
   return self.scaleX, self.scaleY
 end
@@ -155,7 +169,7 @@ function camera:getType()
   return self.type
 end
 
-function camera:shake(stype, intensity, duration)
+function camera:shake(stype, intensity, fade, fadeduration)
 
   if stype == "lock" then
 
@@ -188,6 +202,9 @@ function camera:shake(stype, intensity, duration)
     self.shakeX, self.shakeY = camera:getPosition()
 
   end
+
+  self.fade = fade or false
+  self.fadeduration = fadeduration or 0
 
 end
 

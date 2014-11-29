@@ -5,6 +5,7 @@
 -- Bare in mind, this is by no means a complete test, but its a minimal 
 -- benchmark; if it can't run under this, then you are definitely going to
 -- have problems.
+
 function love.conf(t)
     t.title             = "VideahEngine"                     -- The title of the window the game is in (string)
     t.author            = "Ruairidh 'VideahGams' Carmichael <ruairidhcarmichael@live.co.uk>"   -- The author of the game (string)

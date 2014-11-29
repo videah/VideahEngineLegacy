@@ -3,7 +3,8 @@ map = {}
 function map.load()
 
 	map.directory = "maps/"
-	map.currentMap = sti.new(map.directory .. "test2")
+	map.currentMap = "test2"
+	map.mapData = sti.new(map.directory .. map.currentMap)
 
 	map.Speed = 500
 
@@ -11,7 +12,7 @@ function map.load()
 
 	world = love.physics.newWorld(0*love.physics.getMeter(), 0*love.physics.getMeter())
 
-	collision = map.currentMap:initWorldCollision(world)
+	collision = map.mapData:initWorldCollision(world)
 
 	print("Loaded map system ...")
 
@@ -19,11 +20,13 @@ end
 
 function map.draw()
 
-	map.currentMap:draw()
+	map.mapData:draw()
 
-	map.currentMap:drawWorldCollision(collision)
+	--map.mapData:drawWorldCollision(collision)
 
-	love.graphics.polygon("line", player.body:getWorldPoints(player.shape:getPoints()))
+	--love.graphics.polygon("line", player.body:getWorldPoints(player.shape:getPoints()))
+
+	love.graphics.setBlendMode("alpha")
 
 end
 
@@ -37,7 +40,12 @@ end
 
 function map:changeMap(string)
 
-	currentMap = sti.new(map.directory .. string)
+	map.currentMap = string
+	map.mapData = sti.new(map.directory .. map.currentMap)
+
+	world = love.physics.newWorld(0*love.physics.getMeter(), 0*love.physics.getMeter())
+
+	collision = map.mapData:initWorldCollision(world)
 	player.x = 0
 	player.y = 0
 	player.sx = 0

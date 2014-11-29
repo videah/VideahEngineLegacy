@@ -29,3 +29,9 @@ function util.getDistanceY( x1, y1, x2, y2)
 	return math.sqrt( dy * dy )
 
 end
+
+function util.dprint(string)
+	if global.debug then
+		print("[DEBUG]:" .. string)
+	end
+end

@@ -92,6 +92,7 @@ function menu.GenerateMenuFrame()
 	menuframe:SetWidth(300)
 	menuframe:SetHeight(30 + #menu.options * 55)
 	menuframe:Center()
+	menuframe:SetState("menu")
 
 	for i=1, #menu.options, 1 do
 

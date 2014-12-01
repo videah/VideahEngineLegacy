@@ -45,7 +45,7 @@ flux = require 'util/flux'
 
 function love.load()
 
-	options.applySettings()
+	options.load()
 
 	global.debug = options.settings.settings.debug
 
@@ -163,6 +163,18 @@ function love.update(dt)
 		loveframes.update()
 		love.mouse.setVisible(true)
 		love.mouse.setCursor(cursor.cursor)
+
+	end
+
+	if state:isStateEnabled("options") then
+
+		loveframes.SetState("options")
+
+	end
+
+	if state:isStateEnabled("menu") then
+
+		loveframes.SetState("menu")
 
 	end
 

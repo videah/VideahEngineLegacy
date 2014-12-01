@@ -1,6 +1,13 @@
 options = {}
 options.resolutions = {}
 
+function options.load()
+
+	options.applySettings()
+
+	options.createPanel()
+
+end
 
 function options.applySettings()
 
@@ -53,5 +60,18 @@ function options.resize()
 
 	global.centerWidth = (global.screenWidth / 2) * camera.scaleX
 	global.centerHeight = (global.screenHeight / 2) * camera.scaleY
+
+end
+
+function options.createPanel()
+
+	local optionsframe = loveframes.Create("frame")
+	optionsframe:SetName("Options")
+	optionsframe:SetDraggable(false)
+	optionsframe:ShowCloseButton(false)
+	optionsframe:SetWidth(global.screenWidth - 50)
+	optionsframe:SetHeight(global.screenHeight - 50)
+	optionsframe:Center()
+	optionsframe:SetState("options")
 
 end

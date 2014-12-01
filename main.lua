@@ -77,7 +77,7 @@ function love.load()
 
 	player.load()
 
-	lighting.load()
+	--lighting.load()
 
 	print("Welcome to VideahEngine " .. global.version .. " !")
 

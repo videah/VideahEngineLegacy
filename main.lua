@@ -80,6 +80,11 @@ function love.load()
 
 	player.load()
 
+<<<<<<< HEAD
+=======
+	--lighting.load()
+
+>>>>>>> origin/master
 	print("Welcome to VideahEngine " .. global.version .. " !")
 
 end

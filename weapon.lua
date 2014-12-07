@@ -144,6 +144,7 @@ function bullet.fire()
 	local fixture	= love.physics.newFixture(bulletbody, shape)
 
 	bulletbody:setBullet( true )
+	bulletbody:setLinearDamping(0)
 	fixture:setUserData("Bullet")
 	fixture:setCategory( 2 )
 	fixture:setMask( 2 )

@@ -5,7 +5,7 @@ require 'util/audio'
 require 'util/input'
 
 require 'util/debug'
-LIP = require 'util/LIP'
+LIP = require 'util/LIP' 
 
 require 'util/util'
 
@@ -38,12 +38,15 @@ require 'libs/LoveFrames'
 sti = require 'libs/STI'
 jumper = require 'libs/Jumper'
 flux = require 'util/flux'
+LightWorld = require 'libs/lightworld'
 
 
 ---------------------------------------------------------------------------------------------------
 -- Main
 
 function love.load()
+
+	lighting.load()
 
 	options.load()
 
@@ -77,8 +80,6 @@ function love.load()
 
 	player.load()
 
-	lighting.load()
-
 	print("Welcome to VideahEngine " .. global.version .. " !")
 
 end
@@ -87,13 +88,21 @@ function love.draw()
 
 	if state:isStateEnabled("game") or state:isStateEnabled("multiplayer") then
 
+		--lighting.world:setTranslation(-camera.x, -camera.y, camera.scaleX)
+
 		camera:set()
+
+		lighting.world:draw(function()
 
 		map.draw()
 
 		bullet.draw()
 
 		player.draw()
+
+		end)
+
+		love.graphics.circle("fill", lightMouse:getPosition())
 
 		camera:unset()
 

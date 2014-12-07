@@ -61,11 +61,14 @@ function options.resize()
 	global.centerWidth = (global.screenWidth / 2) * camera.scaleX
 	global.centerHeight = (global.screenHeight / 2) * camera.scaleY
 
+	lighting.world:refreshScreenSize()
+
 end
 
 function options.createPanel()
 
 	local optionsframe = loveframes.Create("frame")
+	
 	optionsframe:SetName("Options")
 	optionsframe:SetDraggable(false)
 	optionsframe:ShowCloseButton(false)

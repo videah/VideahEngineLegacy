@@ -15,16 +15,23 @@ print("Loaded weapon system ...")
 
 function weapon.load()
 
+	-- Create some test weapons
+
 	weapon:create(1, "weapon_pistol", 10, 250)
 	weapon:create(2, "weapon_machinegun", 5, 450)
 	weapon:create(3, "weapon_dummy", 200000, 100)
 	weapon:create(4, "weapon_dummy2", 200000, 100)
+
+	-- Start listening for bullet collisions
 
 	world:setCallbacks( bullet.contact )
 
 end
 
 function weapon:create(id, name, damage, speed)
+
+	-- Create a new weapon.
+	-- Put all weapons stats in seperate lists.
 
 	weapon.namelist[id] = name
 	weapon.damagelist[id] = damage
@@ -34,6 +41,8 @@ function weapon:create(id, name, damage, speed)
 
 end
 
+-- Get the ID from a weapon name.
+
 function weapon:getID(name)
 	for i=1, #self.namelist do
 		if self.namelist[i] == name then
@@ -41,6 +50,10 @@ function weapon:getID(name)
 		end
 	end
 end
+
+-- Get the weapon name from a weapon name.
+-- Sounds stupid, but is mostly to
+-- confirm that the weapon exists.
 
 function weapon:getName(name)
 	for i=1, #self.namelist do
@@ -51,6 +64,8 @@ function weapon:getName(name)
 
 end
 
+-- Get the weapons damage from a weapon name.
+
 function weapon:getDamage(name)
 	for i=1, #self.namelist do
 		if self.namelist[i] == name then
@@ -58,6 +73,8 @@ function weapon:getDamage(name)
 		end
 	end
 end
+
+-- Get the weapons speed from a weapon name.
 
 function weapon:getSpeed(name)
 	for i=1, #self.namelist do
@@ -70,6 +87,9 @@ end
 --------Bullets--------
 
 function bullet.draw()
+
+	-- Cycle through all the bullets
+	-- and draw a circle at all their positions.
 
 	love.graphics.setColor(255, 255, 0)
 
@@ -85,7 +105,7 @@ end
 
 function bullet.update(dt)
 
-	-- Apply force to all the bullets
+	-- Apply force to all the bullets.
 
 	for i,v in ipairs(bullet.list) do
 
@@ -96,7 +116,7 @@ function bullet.update(dt)
 
 	end
 
-	-- Neat memory optimization
+	-- Neat memory optimization.
 	-- Loop through the bullet list
 	-- If all of the bullets return dead
 	-- Then theres no point in keeping the data, just clear it all.
@@ -128,6 +148,8 @@ end
 
 function bullet.fire()
 
+	-- Set some temporary variables.
+
 	local startX = player.sx
 	local startY = player.sy
 	local mouseX = camera:getMouseX()
@@ -137,6 +159,8 @@ function bullet.fire()
 
 	local bulletDx = bullet.speed * math.cos(angle)
 	local bulletDy = bullet.speed * math.sin(angle)
+
+	-- Create the bullet.
 
 	local bulletbody = love.physics.newBody(world, startX, startY, "dynamic")
 
@@ -149,6 +173,8 @@ function bullet.fire()
 	fixture:setCategory( 2 )
 	fixture:setMask( 2 )
 
+	-- Add the bullet to the active bullet list.
+
 	table.insert(bullet.variablelist, {x = startX, y = startY, dx = bulletDx, dy = bulletDy})
 
 	table.insert(bullet.list, {body = bulletbody, isDead = false})
@@ -159,12 +185,19 @@ end
 
 function bullet:destroy(id)
 
+	-- Set the bullet's status to dead.
+	-- And delete the body.
+
 	bullet.list[id].isDead = true
 	bullet.list[id].body:destroy()
 
 end
 
 function bullet.contact(a, b, coll)
+
+	-- If the collider is a bullet.
+	-- and the bullet isn't dead.
+	-- then set the bullets status to dead.
    
 	if b:getUserData() == "Bullet" then
 		local body = b:getBody()

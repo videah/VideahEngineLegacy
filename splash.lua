@@ -4,6 +4,9 @@ splash.imagelist = {}
 splash.transparency = 0
 splash.count = 0
 
+-- Load an image file and add them to a list
+-- to create a splash screen.
+
 function splash:newSplash(file)
 
 	table.insert(splash.splashlist, file)
@@ -13,6 +16,8 @@ function splash:newSplash(file)
 	util.dprint("Loaded splashimage " .. file .. "...")
 
 end
+
+-- Start the tween + load create the actual splash's.
 
 function splash.load()
 
@@ -30,14 +35,19 @@ function splash.draw()
 
 	love.graphics.rectangle("fill", 0, 0, global.screenWidth, global.screenHeight)
 
+	-- Cycle through the splash list.
+
 	for i=1, #splash.splashlist do
 
 		love.graphics.setColor(255,255,255,splash.transparency)
 
+		-- If the current splash is the one in the list.
+
 		if splash.count == i then
 
-			love.graphics.draw(splash.imagelist[i], (global.screenWidth / 2) - (splash.imagelist[i]:getWidth() / 2), 
-				(global.screenHeight / 2) - (splash.imagelist[i]:getHeight() / 2))
+			-- Then grab the splash from the list and draw it to the screen.
+
+			love.graphics.draw(splash.imagelist[i], (global.screenWidth / 2) - (splash.imagelist[i]:getWidth() / 2), (global.screenHeight / 2) - (splash.imagelist[i]:getHeight() / 2))
 
 		end
 
@@ -45,11 +55,16 @@ function splash.draw()
 
 	love.graphics.setColor(255,255,255,255)
 
+	-- If all the splash screens have been drawn
+	-- Then change the state to something else (Like a main menu).
+
 	if splash.count > #splash.splashlist then
 		state:changeState("menu")
 	end
 
 end
+
+-- Temporary splash skip.
 
 function splash.keypressed(key, isrepeat)
 
@@ -60,6 +75,8 @@ function splash.keypressed(key, isrepeat)
 	end
 
 end
+
+-- Fade in and out splash screens.
 
 function splash.fade()
 

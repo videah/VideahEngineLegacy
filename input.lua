@@ -5,6 +5,9 @@ input.currentmb = ""
 
 function input.load()
 
+	-- If there isn't a controls config file
+	-- Then create it.
+
 	if love.filesystem.exists("cfg/controls.ini") == false then
 		local defaultSettings = 
 		{
@@ -23,7 +26,11 @@ function input.load()
 		LIP.save("cfg/controls.ini", defaultSettings)
 	end
 
+	-- Load the controls config.
+
 	local loadedSettings = LIP.load('cfg/controls.ini');
+
+	-- Bind actions to keys from the config.
 
 	--Player Movement
 	input:bind(loadedSettings.controls.forward, "player.forward")
@@ -40,6 +47,8 @@ function input.load()
 
 
 end
+
+-- Function to bind actions to keys
 
 function input:bind(key, action)
 
@@ -59,6 +68,8 @@ function input:bind(key, action)
 
 end
 
+-- Check if the key that's binded to an action is down.
+
 function input.isDown(action)
 
 	for i=0, #input.actionlist do
@@ -71,6 +82,8 @@ function input.isDown(action)
 		end
 	end
 end
+
+-- Check if the mouse key that's binded to an action is down.
 
 function input.mouseIsDown(action)
 
@@ -85,6 +98,8 @@ function input.mouseIsDown(action)
 	end
 end
 
+-- Check if the mouse key that's binded to an action was pressed.
+
 function input.mousePressed(action)
 
 	for i=0, #input.actionlist do
@@ -98,11 +113,16 @@ function input.mousePressed(action)
 	end
 end
 
+-- Get the last mouse button pressed.
+-- Then set the current mouse button to it.
+
 function input.mousepressed( x, y, button)
 
 	input.currentmb = button
 
 end
+
+-- Reset the current mouse button.
 
 function input.update(dt)
 

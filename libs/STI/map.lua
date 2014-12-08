@@ -42,7 +42,7 @@ local function convertEllipseToPolygon(x, y, w, h, max_segments)
 				x = a.x - b.x,
 				y = a.y - b.y,
 			}
-			
+
 			return c.x * c.x + c.y * c.y
 		end
 
@@ -62,7 +62,7 @@ local function convertEllipseToPolygon(x, y, w, h, max_segments)
 			local angle = (i / segments) * math.pi * 2
 			local px = x + w / 2 + math.cos(angle) * w / 2
 			local py = y + h / 2 + math.sin(angle) * h / 2
-			
+
 			table.insert(vertices, { x = px / m, y = py / m })
 		end
 
@@ -86,7 +86,7 @@ local function convertEllipseToPolygon(x, y, w, h, max_segments)
 		local angle = (i / segments) * math.pi * 2
 		local px = x + w / 2 + math.cos(angle) * w / 2
 		local py = y + h / 2 + math.sin(angle) * h / 2
-		
+
 		table.insert(vertices, { x = px, y = py })
 	end
 
@@ -183,6 +183,9 @@ function Map:initWorldCollision(world)
 				local tileset = self.tiles[object.gid].tileset
 				local lid = object.gid - self.tilesets[tileset].firstgid
 				local tile = {}
+
+				-- This fixes a height issue
+				 o.y = o.y + self.tiles[object.gid].offset.y
 
 				for _, t in ipairs(self.tilesets[tileset].tiles) do
 					if t.id == lid then
@@ -288,8 +291,8 @@ function Map:initWorldCollision(world)
 					for x, tile in pairs(tiles) do
 						local object = {
 							shape	= "rectangle",
-							x		= (x-1) * tile.width,
-							y		= (y-1) * tile.height,
+							x		= x * self.width + tile.offset.x,
+							y		= y * self.height + tile.offset.y,
 							width	= tile.width,
 							height	= tile.height,
 						}
@@ -352,23 +355,33 @@ function Map:setTiles(index, tileset, gid)
 
 	for y = 1, h do
 		for x = 1, w do
+			local id = gid - tileset.firstgid
 			local qx = (x - 1) * tw + m + (x - 1) * s
 			local qy = (y - 1) * th + m + (y - 1) * s
 			local properties
+			local terrain
 			local animation
 
 			for _, tile in pairs(tileset.tiles) do
-				if tile.id == gid - tileset.firstgid then
+				if tile.id == id then
 					properties = tile.properties
 					animation = tile.animation
+					if tile.terrain then
+						terrain = {}
+						for i=1,#tile.terrain do
+							terrain[i] = tileset.terrains[tile.terrain[i] + 1]
+						end
+					end
 				end
 			end
 
 			local tile = {
+				id 			= id,
 				gid			= gid,
 				tileset		= index,
 				quad		= quad(qx, qy, tw, th, iw, ih),
 				properties	= properties,
+				terrain     = terrain,
 				animation   = animation,
 				frame       = 1,
 				time        = 0,
@@ -406,6 +419,7 @@ function Map:setLayer(layer, path)
 		layer.draw = function() self:drawTileLayer(layer) end
 	elseif layer.type == "objectgroup" then
 		self:setObjectCoordinates(layer)
+		self:setObjectSpriteBatches(layer)
 		layer.draw = function() self:drawObjectLayer(layer) end
 	elseif layer.type == "imagelayer" then
 		layer.draw = function() self:drawImageLayer(layer) end
@@ -436,9 +450,9 @@ function Map:setTileData(layer)
 				if tile then
 					map[y][x] = tile
 				else
-					local bit31	= 2147483648
-					local bit30	= 1073741824
-					local bit29	= 536870912
+					local bit31		= 2147483648
+					local bit30		= 1073741824
+					local bit29		= 536870912
 					local flipX		= false
 					local flipY		= false
 					local flipD		= false
@@ -461,11 +475,13 @@ function Map:setTileData(layer)
 
 					local tile = self.tiles[realgid]
 					local data = {
+						id			= tile.id,
 						gid			= tile.gid,
 						tileset		= tile.tileset,
 						offset		= tile.offset,
 						quad		= tile.quad,
 						properties	= tile.properties,
+						terrain     = tile.terrain,
 						animation   = tile.animation,
 						sx			= tile.sx,
 						sy			= tile.sy,
@@ -495,6 +511,8 @@ function Map:setTileData(layer)
 					self.tiles[gid] = data
 					map[y][x] = self.tiles[gid]
 				end
+			else
+				map[y][x] = false
 			end
 
 			i = i + 1
@@ -633,6 +651,40 @@ function Map:setSpriteBatches(layer)
 	layer.batches = batches
 end
 
+function Map:setObjectSpriteBatches(layer)
+	local newBatch	= framework.newSpriteBatch
+	local tw		= self.tilewidth
+	local th		= self.tileheight
+	local batches	= {
+	}
+
+	for _, object in ipairs(layer.objects) do
+		if object.gid then
+			local tile = self.tiles[object.gid]
+			local ts = tile.tileset
+			local image = self.tilesets[tile.tileset].image
+
+			batches[ts] = batches[ts] or newBatch(image, 100)
+
+			local batch = batches[ts]
+			local tx = object.x + tw + tile.offset.x
+			local ty = object.y + tile.offset.y
+
+			-- Compensation for scale/rotation shift
+			if tile.sx	< 0 then tx = tx + tw end
+			if tile.sy	< 0 then ty = ty + th end
+			if tile.r	> 0 then tx = tx + tw end
+			if tile.r	< 0 then ty = ty + th end
+
+			id = batch:add(tile.quad, tx, ty, tile.r, tile.sx, tile.sy)
+			self.tileInstances[tile.gid] = self.tileInstances[tile.gid] or {}
+			table.insert(self.tileInstances[tile.gid], { batch=batch, id=id, gid=tile.gid, x=tx, y=ty })
+		end
+	end
+
+	layer.batches = batches
+end
+
 function Map:setDrawRange(tx, ty, w, h)
 	tx = -tx
 	ty = -ty
@@ -678,6 +730,8 @@ function Map:addCustomLayer(name, index)
 
 	table.insert(self.layers, index, layer)
 	self.layers[name] = self.layers[index]
+
+	return layer
 end
 
 function Map:convertToCustomLayer(index)
@@ -746,8 +800,9 @@ function Map:update(dt)
 end
 
 function Map:draw(sx, sy)
+	local current_canvas = framework.getCanvas()
 	framework.setCanvas(self.canvas)
-	framework.clear(self.canvas)
+	self.canvas:clear()
 
 	for _, layer in ipairs(self.layers) do
 		if layer.visible and layer.opacity > 0 then
@@ -755,7 +810,7 @@ function Map:draw(sx, sy)
 		end
 	end
 
-	framework.setCanvas()
+	framework.setCanvas(current_canvas)
 
 	framework.push()
 	framework.origin()
@@ -810,6 +865,7 @@ function Map:drawObjectLayer(layer)
 	local line		= { 160, 160, 160, 255 * layer.opacity }
 	local fill		= { 160, 160, 160, 255 * layer.opacity * 0.2 }
 	local shadow	= { 0, 0, 0, 255 * layer.opacity }
+	local reset		= { 255, 255, 255, 255 * layer.opacity }
 
 	local function sortVertices(obj)
 		local vertices = {{},{}}
@@ -866,6 +922,11 @@ function Map:drawObjectLayer(layer)
 			drawShape(object.polyline, "polyline")
 		end
 	end
+
+	framework.setColor(reset)
+	for _, batch in pairs(layer.batches) do
+		framework.draw(batch, 0, 0)
+	end
 end
 
 function Map:drawImageLayer(layer)
@@ -874,7 +935,7 @@ function Map:drawImageLayer(layer)
 	end
 
 	assert(layer.type == "imagelayer", "Invalid layer type: " .. layer.type .. ". Layer must be of type: imagelayer")
-	
+
 	if layer.image ~= "" then
 		framework.draw(layer.image, layer.x, layer.y)
 	end
@@ -914,10 +975,10 @@ function Map:convertScreenToIsometric(x, y)
 end
 
 function Map:convertTileToScreen(x, y)
-	local tw, th = self.tilewidth, self.tileheight 
+	local tw, th = self.tilewidth, self.tileheight
 
-	local sx = x / tw
-	local sy = y / th
+	local sx = x * tw
+	local sy = y * th
 
 	return sx, sy
 end
@@ -925,8 +986,8 @@ end
 function Map:convertScreenToTile(x, y)
 	local tw, th = self.tilewidth, self.tileheight
 
-	local tx = x * tw
-	local ty = y * th
+	local tx = x / tw
+	local ty = y / th
 
 	return tx, ty
 end
@@ -937,7 +998,7 @@ function Map:convertIsometricTileToScreen(x, y)
 	local ox = mw * tw / 2
 
 	local sx = (x - y) * tw / 2 + ox
-	local sy = (x + y) * th / 2 
+	local sy = (x + y) * th / 2
 
 	return sx, sy
 end

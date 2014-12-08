@@ -5,8 +5,8 @@ global = {}
 global.screenWidth = love.graphics.getWidth()
 global.screenHeight = love.graphics.getHeight()
 
-global.centerWidth = (global.screenWidth / 2) * camera.scaleX
-global.centerHeight = (global.screenHeight / 2) * camera.scaleY
+global.centerWidth = (global.screenWidth / 2) / camera.scale
+global.centerHeight = (global.screenHeight / 2) / camera.scale
 
 global.version = "0.0.4"
 
@@ -23,7 +23,7 @@ function global.update(dt)
 
 	global.mouseX, global.mouseY = love.mouse.getPosition()
 
-	global.centerWidth = (global.screenWidth / 2) * camera.scaleX
-	global.centerHeight = (global.screenHeight / 2) * camera.scaleY
+	global.centerWidth = (global.screenWidth / 2) / camera.scale
+	global.centerHeight = (global.screenHeight / 2) / camera.scale
 
 end

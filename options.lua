@@ -58,8 +58,8 @@ function options.resize()
 	global.screenWidth = love.graphics.getWidth()
 	global.screenHeight = love.graphics.getHeight()
 
-	global.centerWidth = (global.screenWidth / 2) * camera.scaleX
-	global.centerHeight = (global.screenHeight / 2) * camera.scaleY
+	global.centerWidth = (global.screenWidth / 2) * camera.scale
+	global.centerHeight = (global.screenHeight / 2) * camera.scale
 
 	lighting.world:refreshScreenSize()
 

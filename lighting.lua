@@ -9,9 +9,8 @@ function lighting.load()
 		ambient = {55,55,55},
 	})
 
-	lightMouse = lighting.world:newLight(0, 0, 255, 255, 255, 1000)
-	lightMouse:setGlowStrength(0.3)
-
+	lightMouse = lighting.world:newLight(0, 0, 255, 100, 255, 100)
+	
 end
 
 function lighting.update(dt)

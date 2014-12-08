@@ -2,8 +2,7 @@ camera = {}
 camera.x = 0
 camera.y = 0
 
-camera.scaleX = 0.5
-camera.scaleY = 0.5
+camera.scale = 2
 camera.rotation = 0
 camera.type = "mouse-locked"
 
@@ -27,8 +26,8 @@ function camera:set()
   --  Sets the scene by rotating and changing position of the camera.
 
   love.graphics.push()
-  love.graphics.scale(1 / self.scaleX, 1 / self.scaleY)
   love.graphics.translate(-self.x, -self.y)
+  love.graphics.scale(self.scale)
   love.graphics.rotate(-self.rotation)
 
 end
@@ -43,8 +42,8 @@ function camera.update(dt)
 
   if camera.type == "mouse-locked" then
 
-    camera.lmouseX = math.floor(global.centerWidth - (global.mouseX - global.centerWidth * (1 / camera.scaleX)) / camera.weight)
-    camera.lmouseY = math.floor(global.centerHeight - (global.mouseY - global.centerHeight * (1 / camera.scaleX)) / camera.weight)
+    camera.lmouseX = math.floor(global.centerWidth - (global.mouseX - global.centerWidth * (camera.scale)) / camera.weight)
+    camera.lmouseY = math.floor(global.centerHeight - (global.mouseY - global.centerHeight * (camera.scale)) / camera.weight)
 
     camera:setPosition(math.floor(player.sx) - camera.lmouseX, math.floor(player.sy) - camera.lmouseY)
 
@@ -67,7 +66,7 @@ function camera.update(dt)
     if camera.shaketype == "player" then
 
         camera.shakeX, camera.shakeY = player:getPosition()
-        camera.shakeX, camera.shakeY = math.floor(camera.shakeX - ((global.screenWidth / 2) * camera.scaleX)), math.floor(camera.shakeY - ((global.screenHeight / 2) * camera.scaleY))
+        camera.shakeX, camera.shakeY = math.floor(camera.shakeX - ((global.screenWidth / 2) * camera.scale)), math.floor(camera.shakeY - ((global.screenHeight / 2) * camera.scale))
         camera:setPosition(math.floor(camera.shakeX + math.random(-camera.intensity, camera.intensity)), math.floor(camera.shakeY + math.random(-camera.intensity, camera.intensity)))
 
     end
@@ -112,10 +111,9 @@ function camera:rotate(dr)
   self.rotation = self.rotation + dr
 end
 
-function camera:scale(sx, sy)
+function camera:setScale(sx)
   sx = sx or 1
-  self.scaleX = self.scaleX * sx
-  self.scaleY = self.scaleY * (sy or sx)
+  self.scale = sx
 end
 
 function camera:setPosition(x, y)
@@ -124,13 +122,12 @@ function camera:setPosition(x, y)
 end
 
 function camera:lookAt(x, y)
-  self.x = x - (global.centerWidth) * self.scaleX or self.x
-  self.y = y - (global.centerHeight) * self.scaleY or self.y
+  self.x = x - (global.centerWidth) / self.scale or self.x
+  self.y = y - (global.centerHeight) / self.scaleY or self.y
 end
 
 function camera:setScale(s)
-  self.scaleX = s or self.scaleX
-  self.scaleY = s or self.scaleY
+  self.scale = s or self.scale
 end
 
 function camera:getPosition()
@@ -146,19 +143,19 @@ function camera:getPositionY()
 end
 
 function camera:getScale()
-  return self.scaleX, self.scaleY
+  return self.scale
 end
 
 function camera:getMousePosition()
-  return love.mouse.getX() * self.scaleX + self.x, love.mouse.getY() * self.scaleY + self.y
+  return love.mouse.getX() / self.scale + self.x, love.mouse.getY() / self.scaleY + self.y
 end
 
 function camera:getMouseX()
-  return love.mouse.getX() * self.scaleX + self.x
+  return love.mouse.getX() / self.scale + self.x
 end
 
 function camera:getMouseY()
-  return love.mouse.getY() * self.scaleY + self.y
+  return love.mouse.getY() / self.scale + self.y
 end
 
 function camera:setType(type)

@@ -80,11 +80,6 @@ function love.load()
 
 	player.load()
 
-<<<<<<< HEAD
-=======
-	--lighting.load()
-
->>>>>>> origin/master
 	print("Welcome to VideahEngine " .. global.version .. " !")
 
 end
@@ -93,7 +88,7 @@ function love.draw()
 
 	if state:isStateEnabled("game") or state:isStateEnabled("multiplayer") then
 
-		--lighting.world:setTranslation(-camera.x, -camera.y, camera.scaleX)
+		lighting.world:setTranslation(-camera.x * 2, -camera.y * 2, camera.scale)
 
 		camera:set()
 
@@ -106,8 +101,6 @@ function love.draw()
 		player.draw()
 
 		end)
-
-		love.graphics.circle("fill", lightMouse:getPosition())
 
 		camera:unset()
 

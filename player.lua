@@ -227,7 +227,7 @@ end
 
 function player.updateWeaponList(dt)
 
-	if input.mousePressed("player.nextwep") then
+	if input.mousePressed("player.prevwep") then
 		if player.weapons[#player.weapons] == player.currentWeapon then
 			player.currentWeapon = player.weapons[1]
 		else
@@ -240,7 +240,7 @@ function player.updateWeaponList(dt)
 		end
 	end
 
-	if input.mousePressed("player.prevwep") then
+	if input.mousePressed("player.nextwep") then
 		if player.weapons[1] == player.currentWeapon then
 			player.currentWeapon = player.weapons[#player.weapons]
 		else

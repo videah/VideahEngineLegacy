@@ -3,7 +3,7 @@ player = {}
 function player.load()
 
 	player.name = "Player"
-	player.image = love.graphics.newImage( "custom/template.png" )
+	player.image = "custom/template.png"
 	player.baseSpeed = 1350
 	player.currentSpeed = 0
 	player.x = 0
@@ -257,6 +257,6 @@ end
 
 function player.InternalVariables()
 
-	--player.image = love.graphics.newImage(player.image)
+	player.image = love.graphics.newImage(player.image)
 
 end

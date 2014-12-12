@@ -88,7 +88,7 @@ function love.draw()
 
 	if state:isStateEnabled("game") or state:isStateEnabled("multiplayer") then
 
-		lighting.world:setTranslation(-camera.x * 2, -camera.y * 2, camera.scale)
+		lighting.world:setTranslation(-camera.x * camera.scale, -camera.y * camera.scale, camera.scale)
 
 		camera:set()
 

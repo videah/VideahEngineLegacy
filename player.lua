@@ -31,8 +31,7 @@ function player.load()
 
 	player:giveWeapon("weapon_pistol")
 	player:giveWeapon("weapon_machinegun")
-	-- player:giveWeapon("weapon_dummy")
-	-- player:giveWeapon("weapon_dummy2")
+	player:giveWeapon("weapon_lightspawner")
 
 	player.currentWeapon = player.weapons[1] -- Temp
 
@@ -113,17 +112,12 @@ function player.controls(dt)
 	-- Automatic firing
 	if input.mouseIsDown("player.primaryfire") then
 
-		if player.currentWeapon == "weapon_dummy" then
-			print("I'm a dummy :D")
-
-		elseif player.currentWeapon == "weapon_machinegun" then
+		if player:isCurrentWeapon("weapon_machinegun") then
 
 			bullet.fire()
 			camera:shake("hybrid", 4, true, 0.2)
 
 		end
-
-
 
 	end
 
@@ -131,9 +125,15 @@ function player.controls(dt)
 	if input.mousePressed("player.primaryfire") then
 
 		--Pistol
-		if player.currentWeapon == "weapon_pistol" then
+		if player:isCurrentWeapon("weapon_pistol") then
 			bullet.fire()
 			camera:shake("hybrid", 2, true, 0.2)
+		end
+
+		if player:isCurrentWeapon("weapon_lightspawner") then
+
+			lighting.world:newLight(camera:getMouseX(), camera:getMouseY(), math.random(255), math.random(255), math.random(255), 250)
+
 		end
 
 	end
@@ -207,6 +207,22 @@ function player:giveWeapon(name)
 			table.insert(self.weapons, gotWeapon)
 		end
 	end
+end
+
+function player:getCurrentWeapon()
+
+	return player.currentWeapon
+
+end
+
+function player:isCurrentWeapon(name)
+
+	if name == player.currentWeapon then
+		return true
+	else
+		return false
+	end
+
 end
 
 function player.updateWeaponList(dt)

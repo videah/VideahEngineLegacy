@@ -26,8 +26,8 @@ function camera:set()
   --  Sets the scene by rotating and changing position of the camera.
 
   love.graphics.push()
-  love.graphics.translate(-self.x, -self.y)
   love.graphics.scale(self.scale)
+  love.graphics.translate(-self.x, -self.y)
   love.graphics.rotate(-self.rotation)
 
 end

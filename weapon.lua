@@ -19,8 +19,7 @@ function weapon.load()
 
 	weapon:create(1, "weapon_pistol", 10, 250)
 	weapon:create(2, "weapon_machinegun", 5, 450)
-	weapon:create(3, "weapon_dummy", 200000, 100)
-	weapon:create(4, "weapon_dummy2", 200000, 100)
+	weapon:create(3, "weapon_lightspawner", 0, 0)
 
 	-- Start listening for bullet collisions
 

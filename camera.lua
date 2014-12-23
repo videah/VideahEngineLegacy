@@ -91,10 +91,10 @@ end
 
 function camera.unlockedControls(dt)
 
-  if love.keyboard.isDown("up") then camera:move(0, math.floor(-camera.speed * dt)) end
-  if love.keyboard.isDown("down") then camera:move(0, math.floor(camera.speed * dt)) end
-  if love.keyboard.isDown("left") then camera:move(math.floor(-camera.speed * dt), 0) end
-  if love.keyboard.isDown("right") then camera:move(math.floor(camera.speed * dt), 0)  end
+  if love.keyboard.isDown("up") then camera:move(0, -camera.speed * dt) end
+  if love.keyboard.isDown("down") then camera:move(0, camera.speed * dt) end
+  if love.keyboard.isDown("left") then camera:move(-camera.speed * dt, 0) end
+  if love.keyboard.isDown("right") then camera:move(camera.speed * dt, 0)  end
 
 end
 
@@ -103,8 +103,8 @@ function camera:unset()
 end
 
 function camera:move(dx, dy)
-  self.x = math.floor(self.x + (dx or 0))
-  self.y = math.floor(self.y + (dy or 0))
+  self.x = util.round(self.x + (dx or 0))
+  self.y = util.round(self.y + (dy or 0))
 end
 
 function camera:rotate(dr)

@@ -35,3 +35,7 @@ function util.dprint(string)
 		print("[DEBUG]:" .. string)
 	end
 end
+
+function util.round(num)
+	return math.floor(num + 0.5)
+end

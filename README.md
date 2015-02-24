@@ -1,8 +1,9 @@
 ![](https://i.imgur.com/bQYMoGm.png)
 
-Personal Love2D Engine Project.
-
-Code is a bit of a mess right now and needs cleaning.
+This is a legacy version of VideahEngine, before I decided to rewrite it.
+Everything is old.
+Everything is bad.
+Beware.
 
 ## Licence
 
